@@ -16,4 +16,5 @@ ENV DELAY 60
 ENV LOG_LEVEL INFO
 
 # Run app.py when the container launches
+CMD ["bash", "start.sh"]
 CMD ["python", "jackett2telegram.py"]
