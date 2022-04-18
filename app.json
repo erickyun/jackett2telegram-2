@@ -14,7 +14,7 @@
 
       "description": "Paste rclone config in RAW url (use githubgist secret)",
 
-      "value": "Enter Telegram TOKEM"
+      "value": "Enter Telegram TOKEN"
 
     },
 
