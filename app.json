@@ -12,7 +12,7 @@
 
       "TOKEN": {
 
-      "description": "Paste rclone config in RAW url (use githubgist secret)",
+      "description": "Paste Bot Token from @fatherbot here",
 
       "value": "Enter Telegram TOKEN"
 
@@ -20,7 +20,7 @@
 
       "CHATID": {
 
-      "description": "Torrent downloader website password",
+      "description": "Telegram chatid",
 
       "value": "Enter Telegram CHATID"
 
