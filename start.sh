@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python jackett2telegram.py
+python jackett2telegram.py $PORT
