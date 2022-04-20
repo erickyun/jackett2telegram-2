@@ -19,6 +19,13 @@
 
 * Click on the Rapid deployment button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/erickyun/jackett2telegram-2) and deploy app
 
+* Wait for the app to finish deploying
+
+* Go to the app's dashboard and go onto the 'Resources' tab
+
+* On the worker source setup.sh && bash start.sh worker, click the the pencil icon and toggle it on
+
+* Now open telegram and use the commands below to interact with your bot
 
 
 # Jackett RSS to Telegram Bot
