@@ -25,6 +25,11 @@
       "value": "Enter Telegram CHATID"
 
     }
+    },
+    "addons": [
+      {
+        "plan": "heroku-postgresql"
+      }
 
   },
 
