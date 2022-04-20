@@ -23,15 +23,16 @@
       "description": "Telegram chatid",
 
       "value": "Enter Telegram CHATID"
-
-    }
+    
     },
+
     "addons": [
       {
         "plan": "heroku-postgresql"
       }
+    ],
 
-  },
+  {
 
   "website": "",
 
