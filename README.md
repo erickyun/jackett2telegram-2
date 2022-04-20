@@ -23,7 +23,7 @@
 
 * Go to the app's dashboard and go onto the 'Resources' tab
 
-* On the worker source setup.sh && bash start.sh worker, click the the pencil icon and toggle it on
+* On the worker python jackett2telegram.py, click the the pencil icon and toggle it on
 
 * Now open telegram and use the commands below to interact with your bot
 
