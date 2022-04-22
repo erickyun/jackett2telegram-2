@@ -1,37 +1,19 @@
 {
-
-  "name": "jackett2telegram",
-
-  "description": "Jackett RSS to Telegram Bot",
-
-  "logo": "https://raw.githubusercontent.com/danimart1991/jackett2telegram/main/docs/images/logo.png",
-
-  "keywords": ["jackett2telegram", "jackett", "telegramm", "web", "herokuweb", "safe", "password", "password", "no-password", "oneclickdeploy", "deploy-to-heroku", "docker"],
-
-  "env": {
-
-      "TOKEN": {
-
-      "description": "Paste Bot Token from @fatherbot here",
-
-      "value": "Enter Telegram TOKEN"
-
-    },
-
-      "CHATID": {
-
-      "description": "Telegram chatid",
-
-      "value": "Enter Telegram CHATID"
-
-    }
-
-  },
-
-  "website": "",
-
-  "repository": "",
-
-  "stack": "container"
-
- }
+	"name": "jackett2tg",
+	"description": "A Telegram bot for all your mirror needs",
+	"repository": "https://github.com/sherlockia2/jackett2telegram",
+	"stack": "container",
+	"env": {
+		"TOKEN": {
+			"description": "Get it from Botfather",
+			"required": true
+		},
+		"CHATID": {
+			"description": "",
+			"required": true
+		}
+	},
+	"addons": [{
+		"plan": "heroku-postgresql"
+	}]
+}
