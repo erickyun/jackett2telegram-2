@@ -2,6 +2,7 @@ import logging
 import requests
 import os
 import sqlite3
+from psycopg2 import connect, DatabaseError
 import string
 import unicodedata
 import xml.etree.ElementTree as ElementTree
@@ -32,8 +33,8 @@ token = os.environ['TOKEN'] if os.environ.get('TOKEN') else "<YOUR_TOKEN_HERE>"
 chatid = os.environ['CHATID'] if os.environ.get(
     'CHATID') else "<YOUR_CHATID_HERE>"
 delay = int(os.environ['DELAY']) if os.environ.get('DELAY') else 600
-log_level = levels.get(os.environ['LOG_LEVEL'].lower()) if os.environ.get(
-    'LOG_LEVEL') else logging.INFO
+dburl = os.environ['DATABASE_URL'] if os.environ.get('DATABASE_URL') else "<YOUR_URL_HERE>"
+log_level = levels.get(os.environ['LOG_LEVEL'].lower()) if os.environ.get('LOG_LEVEL') else logging.INFO
 
 ns = {'torznab': 'http://torznab.com/schemas/2015/feed'}
 rss_dict = {}
@@ -44,39 +45,48 @@ char_limit = 255
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=log_level)
 
-
 # SQLITE
 
 
 def init_sqlite():
     logging.debug("Trying to create the Database")
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS rss (name text PRIMARY KEY, link text, last_pubdate text, last_items text, is_down integer)''')
-
-
-def sqlite_connect():
     global conn
-    conn = sqlite3.connect(db_path, check_same_thread=False)
+    conn = connect(dburl)
+    global c
+    c = conn.cursor()
+    sql = """CREATE TABLE IF NOT EXISTS rss (
+             name text PRIMARY KEY,
+             link text,
+             last_pubdate text,
+             last_items text,
+             is_down integer
+          )
+          """
+    c.execute(sql)
+    conn.commit()
+    logging.info("Database created")
 
+def disconnect():
+    c.close()
+    conn.close()
 
 def sqlite_load_all():
-    sqlite_connect()
+    conn = connect(dburl)
     c = conn.cursor()
-    c.execute('SELECT * FROM rss')
+    c.execute("SELECT * FROM rss")
     rows = c.fetchall()
-    conn.close()
+    disconnect()
     return rows
 
 
 def sqlite_write(name: str, link: str, last_pubdate: str, last_items: str, is_down: int):
-    sqlite_connect()
+    conn = connect(dburl)
     c = conn.cursor()
-    values = [(name), (link), (last_pubdate), (last_items), (is_down)]
-    c.execute(
-        '''REPLACE INTO rss (name,link,last_pubdate,last_items,is_down) VALUES(?,?,?,?,?)''', values)
+    values = (name, link, last_pubdate, last_items, is_down)
+    c.execute("INSERT INTO rss (name,link,last_pubdate,last_items,is_down) VALUES(%s,%s,%s,%s,%s)", values)
     conn.commit()
-    conn.close()
+    disconnect()
+
 
 # RSS
 
@@ -516,12 +526,16 @@ def main():
         disable_web_page_preview=True,
         quote=True,
         parse_mode="MARKDOWNV2")
+    
+    logging.info("Config=" + config_path)
+    logging.info("DB-Config=" + db_path)
+    logging.info("DB-Url=" + dburl)
 
     # Try to create a database if missing
     try:
         init_sqlite()
-    except sqlite3.OperationalError:
-        logging.exception("Fail trying to create the Database.")
+    except DatabaseError as error:
+        logging.exception(f"Error in DB connection: {error}")
         pass
     rss_load()
 
